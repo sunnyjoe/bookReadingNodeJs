@@ -236,6 +236,43 @@ router.route('/confirmborrow')
       res.send("no post")
 });
 
+router.route('/returnbook')
+.get(function(req, res) {
+    var url_parts = url.parse(req.url, true);
+    bookid = url_parts.query.bookid;
+    reader = url_parts.query.reader;
+    thetime = (new Date()).getTime();
+
+    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"')";
+    console.log(queryStr);
+
+    pg.connect(connectionString, (err, client, done) => {
+      client.query(queryStr, function(err, results, fields){
+        if (!err) res.send("ok");
+        });
+      });
+})
+
+
+router.route('/getbookborrowlist')
+.get(function(req, res) {
+    var url_parts = url.parse(req.url, true);
+    bookid = url_parts.query.bookid;
+
+    queryStr = "select reader, thetime from borrowinfo where bookid='" + bookid + "';";
+    console.log(queryStr);
+
+    pg.connect(connectionString, (err, client, done) => {
+      client.query(queryStr, function(err, results, fields){
+        console.log(results.rows);
+        if (!err) res.json(results.rows);
+        });
+      });
+})
+.post(function(req, res) {
+      res.send("no post")
+});
+
 router.route('/searchbooklist')
   .get(function(req, res) {
               var url_parts = url.parse(req.url, true);
@@ -283,6 +320,7 @@ router.route('/getbookdetail')
 
               pg.connect(connectionString, (err, client, done) => {
                 client.query(queryStr, function(err, results, fields){
+                  console.log(results.rows);
                   if (!err) res.json(results.rows);
                   });
                 });

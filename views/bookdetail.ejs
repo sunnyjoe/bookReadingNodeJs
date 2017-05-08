@@ -3,38 +3,35 @@
 <body>
     <p><%=name%>
         <p/>
-
-  <button type="button" onclick="searchBooks()"> 还 书 </button>
-  <button type="button" onclick="borrowBooks()"> 借 书 </button>
-
-                <br><br>
                 <br> 作者:
                 <%=author%>
                     <br> 简介：
                     <br>
                     <textarea rows="5" cols="50" id="desc"> </textarea>
-                    <br>
-                    总数量：
                     <div id="count">---</div>
-
-                    剩下：
                     <div id="lastcount">---</div>
                     <br>
 
+                    <button type="button" onclick="borrowBooks()"> 借 书 </button>
+<br><br>
+
+                    借书记录：
+
+                    <div id="log"></div>
         <script>
             //  var url_parts = url.parse(req.url, true);
             //  var bookid = url_parts.query.bookid;
-            var bookid = getUrlVars()["bookid"];
-            var bookName = getUrlVars()["name"];
-            var bookAuthor= getUrlVars()["author"];
+          var bookid = getUrlVars()["bookid"];
+          var bookName = getUrlVars()["name"];
+          var bookAuthor= getUrlVars()["author"];
+          var totalBook = 0;
+          var readers = new Array;
 
             fetchBookDetail();
-          //  fetchBookBorrowInfo();
 
             function fetchBookDetail() {
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function() {
-                    alert(this.status);
                     if (this.readyState == 4 && this.status == 200) {
                         parseJsonToTable(this.responseText);
                     }
@@ -44,22 +41,66 @@
                 xhttp.send()
             }
 
-            // function fetchBookBorrowInfo() {
-            //     var xhttp = new XMLHttpRequest();
-            //     xhttp.onreadystatechange = function() {
-            //         if (this.readyState == 4 && this.status == 200) {
-            //             parseJsonToTable(this.responseText);
-            //         }
-            //     };
-            //
-            //     xhttp.open("GET", "getbookdetail?bookid=" + bookid, true);
-            //     xhttp.send()
-            // }
+            function fetchBookBorrowInfo() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        parsereaderlist(this.responseText);
+                    }
+                };
 
-            func borrowBooks(){
-              alert("borrow?bookid="+bookid+"&name="+bookName+"&author="+bookAuthor);
+                xhttp.open("GET", "getbookborrowlist?bookid=" + bookid, true);
+                xhttp.send()
+            }
+
+            function parsereaderlist(response) {
+                readers = JSON.parse(response);
+
+                recaculateRemain();
+
+                var out = "<br>";
+                for(i = 0; i < readers.length; i++) {
+                     out += "<span style=\"display:inline-block; width: 100; height: 35\">" + readers[i].reader + "</span>";
+                     out += "<span style=\"display:inline-block; width: 100; height: 35\">" + intToTimeStr(readers[i].thetime) + "</span>"
+                     out += "<button type=\"button\" onclick=returnBooks("+i+")> 还书 </button>"
+                     out +="<br>"
+                }
+                document.getElementById("log").innerHTML = out;
+            }
+
+            function returnBooks(index) {
+              if (index >= readers.length) {
+                return
+              }
+              var readerName = readers[index].reader;
+              var theTime = readers[index].thetime;
+
+              var txt;
+              if (confirm("确定 " + readerName + " 还书？") == true) {
+                
+              } else {
+                return;
+              }
+            }
+
+            function intToTimeStr(theTime) {
+              var  myDate = new Date(parseInt(theTime));
+              var theyear=myDate.getFullYear()
+              var themonth=myDate.getMonth()+1
+              var thetoday=myDate.getDate()
+
+              return theyear+"/"+themonth+"/"+thetoday;
+           }
+
+            function recaculateRemain(){
+              var remain = totalBook - readers.length;
+              document.getElementById("lastcount").innerHTML = "剩余：" + remain;
+            }
+
+            function borrowBooks(){
               window.location.href = "borrow?bookid="+bookid+"&name="+bookName+"&author="+bookAuthor;
             }
+
 
             function getUrlVars() {
                 var vars = {};
@@ -71,15 +112,19 @@
 
             function parseJsonToTable(response) {
                 var arr = JSON.parse(response);
-                var i;
 
                 if (arr.length == 0) {
                     return;
                 }
-                alert(arr[0].count);
+              //  alert(arr[0].count);
+                totalBook = parseInt(arr[0].count);
                 document.getElementById("desc").value = arr[0].description;
-                document.getElementById("count").innerHTML = "总数量：" + arr[0].count;
+                document.getElementById("count").innerHTML = "总数量：" + totalBook;
+
+                fetchBookBorrowInfo();
+                recaculateRemain();
             }
+
         </script>
 </body>
 
