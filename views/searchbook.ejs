@@ -51,6 +51,7 @@
          <div id="id01"></div>
       </div>
       <script>
+
          function searchBooks(){
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
@@ -63,26 +64,31 @@
           xhttp.send()
          }
 
-         function parseJsonToTable(response, tableId) {
-          var arr = JSON.parse(response);
-          var i;
-          var out = "<table>";
+         var list=new Array; ///this one way of declaring array in javascript
 
-          for(i = 0; i < arr.length; i++) {
-             out += "<tr onclick=myFunction("+arr[i].bookid+")>";
-             if (tableId == "id01") {
-               out += "<td>" + arr[i].name + "</td>";
-             }
-             out += "<td>" + arr[i].author + "</td>" + "</tr>";
-          }
-             out += "</table>";
-             document.getElementById(tableId).innerHTML = out;
+         function parseJsonToTable(response, tableId) {
+           var localarr = JSON.parse(response);
+           list = localarr
+           var i;
+           var out = "<table>";
+
+           for(i = 0; i < localarr.length; i++) {
+              out += "<tr onclick=selectrow("+i+")>";
+              out += "<td>" + localarr[i].name + "</td>";
+              out += "<td>" + localarr[i].author + "</td>" + "</tr>";
+           }
+              out += "</table>";
+              document.getElementById(tableId).innerHTML = out;
          }
 
 
-         function selectBook(x) {
-            window.location.href = "bookdetail?bookid="+x;
-          }
+          function selectrow(index) {
+            var bookid = list[index].bookid;
+            var name = list[index].name;
+            var author = list[index].author;
+
+            window.location.href = "bookdetail?bookid="+bookid+"&name="+name+"&author="+author;
+           }
 
       </script>
    </body>

@@ -1,61 +1,86 @@
 <html>
 
-   <body>
-    <p>详细信息 <p/>
-      <div id="first" class="tabcontent">
+<body>
+    <p><%=name%>
+        <p/>
 
-         <br>
-          书名:
-         <label id = "name" >
-         <br>
-		作者:
-         <label id = "author" >
-         <br>
+  <button type="button" onclick="searchBooks()"> 还 书 </button>
+  <button type="button" onclick="borrowBooks()"> 借 书 </button>
 
-         剩下数量：
-         <label id="count">
-         <br>
+                <br><br>
+                <br> 作者:
+                <%=author%>
+                    <br> 简介：
+                    <br>
+                    <textarea rows="5" cols="50" id="desc"> </textarea>
+                    <br>
+                    总数量：
+                    <div id="count">---</div>
 
-			简介：
-         <br>
-         <textarea rows="5" cols="50" id = "desc"> </textarea>
-         <br>
-         <br>
+                    剩下：
+                    <div id="lastcount">---</div>
+                    <br>
 
-      </div>
+        <script>
+            //  var url_parts = url.parse(req.url, true);
+            //  var bookid = url_parts.query.bookid;
+            var bookid = getUrlVars()["bookid"];
+            var bookName = getUrlVars()["name"];
+            var bookAuthor= getUrlVars()["author"];
 
+            fetchBookDetail();
+          //  fetchBookBorrowInfo();
 
-      <script>
-          reloadNewAddedBooks();
+            function fetchBookDetail() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    alert(this.status);
+                    if (this.readyState == 4 && this.status == 200) {
+                        parseJsonToTable(this.responseText);
+                    }
+                };
 
-          function reloadNewAddedBooks(){
-           var xhttp = new XMLHttpRequest();
-           xhttp.onreadystatechange = function() {
-             if (this.readyState == 4 && this.status == 200) {
-                 parseJsonToTable(this.responseText);
-                 alert(this.responseText);
-             }};
+                xhttp.open("GET", "getbookdetail?bookid=" + bookid, true);
+                xhttp.send()
+            }
 
-           document.getElementById("name").value = arr[0].name;
-           xhttp.open("GET", "getbookdetail?bookid="+bookid, true);
-           xhttp.send()
-         }
+            // function fetchBookBorrowInfo() {
+            //     var xhttp = new XMLHttpRequest();
+            //     xhttp.onreadystatechange = function() {
+            //         if (this.readyState == 4 && this.status == 200) {
+            //             parseJsonToTable(this.responseText);
+            //         }
+            //     };
+            //
+            //     xhttp.open("GET", "getbookdetail?bookid=" + bookid, true);
+            //     xhttp.send()
+            // }
 
-         function parseJsonToTable(response) {
-           var arr = JSON.parse(response);
-           var i;
-           var out = "<table>";
+            func borrowBooks(){
+              alert("borrow?bookid="+bookid+"&name="+bookName+"&author="+bookAuthor);
+              window.location.href = "borrow?bookid="+bookid+"&name="+bookName+"&author="+bookAuthor;
+            }
 
-           if (arr.length == 0) {
-             return;
-           }
-              document.getElementById("name").value = arr[0].name;
-              document.getElementById("author").value = arr[0].author;
-              document.getElementById("desc").value = arr[0].description;
-              document.getElementById("count").value = arr[0].count;
-         }
+            function getUrlVars() {
+                var vars = {};
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+                    vars[key] = value;
+                });
+                return vars;
+            }
 
+            function parseJsonToTable(response) {
+                var arr = JSON.parse(response);
+                var i;
 
-      </script>
-   </body>
+                if (arr.length == 0) {
+                    return;
+                }
+                alert(arr[0].count);
+                document.getElementById("desc").value = arr[0].description;
+                document.getElementById("count").innerHTML = "总数量：" + arr[0].count;
+            }
+        </script>
+</body>
+
 </html>

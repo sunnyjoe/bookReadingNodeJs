@@ -3,10 +3,10 @@ CREATE DATABASE biblereading;
 
 \c biblereading;
 
-CREATE TABLE userinfo
+CREATE TABLE borrowhistory
 (
-name varchar(255),
-password varchar(255)
+bookId varchar(255),
+thetime varchar(255)
 );
 
 CREATE TABLE bookinfo
@@ -18,8 +18,9 @@ description text,
 count int
 );
 
-CREATE TABLE borrowLog
+CREATE TABLE borrowinfo
 (
-userName varchar(255),
-bookId varchar(255)
+bookId varchar(255),
+reader varchar(255),
+thetime varchar(255)
 );

@@ -5,58 +5,36 @@
       <div id="first" class="tabcontent">
 
          <br>
-          书名:
-         <label id = "name" >
+          书名:<%=name%>
          <br>
-		作者:
-         <label id = "author" >
+		       作者:<%=author%>
          <br>
 
-         剩下数量：
-         <label id="count">
          <br>
 
-			简介：
-         <br>
-         <textarea rows="5" cols="50" id = "desc"> </textarea>
-         <br>
-         <br>
-
-         <input type="text" id = "author" placeholder="借阅者姓名" >
+         <input type="text" id = "reader" placeholder="借阅者姓名" >
 
          <br><br>
          <br>
-         <button type="button" onclick="loadDoc()">确定借书</button>
+         <button type="button" onclick="confirm()">确定借书</button>
          <br>
 
       </div>
 
 
       <script>
-          reloadNewAddedBooks();
+      var bookid = getUrlVars()["bookid"];
 
-          function reloadNewAddedBooks(){
+          function confirm(){
            var xhttp = new XMLHttpRequest();
            xhttp.onreadystatechange = function() {
              if (this.readyState == 4 && this.status == 200) {
-                 parseJsonToTable(this.responseText);
+                 alert("借书成功 已经记录");
              }};
-           xhttp.open("GET", "newaddedbook", true);
+
+          var reader = document.getElementById("reader").value;
+           xhttp.open("GET", "confirmborrow?bookid="+bookid+"&reader="+reader, true);
            xhttp.send()
-         }
-
-         function parseJsonToTable(response) {
-           var arr = JSON.parse(response);
-           var i;
-           var out = "<table>";
-
-           if (arr.length == 0) {
-             return;
-           }
-              document.getElementById("name").value = arr[0].name;
-              document.getElementById("author").value = arr[0].author;
-              document.getElementById("desc").value = arr[0].description;
-              document.getElementById("count").value = arr[0].count;
          }
 
 

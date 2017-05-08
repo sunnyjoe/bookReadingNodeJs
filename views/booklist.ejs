@@ -32,7 +32,7 @@
 
       <h3>方舟图书</h3>
       <span><a href="/addbook">添加新书</a></span>
-      <span><a href="/searchbook">图书借阅</a></span>
+      <span><a href="/searchbook">图书检索借阅</a></span>
 
 
 <br><br><br>
@@ -82,15 +82,6 @@
          function intToTimeStr(theTime) {
            var  myDate = new Date(1000*theTime);
            return myDate.toLocaleTimeString();
-        }
-
-        function tableOperation() {
-          var table = document.getElementById("myTable");
-          var row = table.insertRow(0);
-          var cell1 = row.insertCell(0);
-          var cell2 = row.insertCell(1);
-          cell1.innerHTML = "NEW CELL1";
-          cell2.innerHTML = "NEW CELL2";
         }
 
       </script>

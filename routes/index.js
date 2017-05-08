@@ -200,12 +200,40 @@ router.route('/searchbook')
 
 router.route('/borrow')
 .get(function(req, res) {
+  var url_parts = url.parse(req.url, true);
+  bookid = url_parts.query.bookid;
+  name = url_parts.query.name;
+  author = url_parts.query.author;
+  console.log(bookid);
   res.render('borrow', {
-      title: '新书'
+      bookid: bookid,
+      name: name,
+      author: author
   });
 })
 .post(function(req, res) {
     res.send("no post")
+});
+
+
+router.route('/confirmborrow')
+.get(function(req, res) {
+    var url_parts = url.parse(req.url, true);
+    bookid = url_parts.query.bookid;
+    reader = url_parts.query.reader;
+    thetime = (new Date()).getTime();
+
+    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"')";
+    console.log(queryStr);
+
+    pg.connect(connectionString, (err, client, done) => {
+      client.query(queryStr, function(err, results, fields){
+        if (!err) res.send("ok");
+        });
+      });
+})
+.post(function(req, res) {
+      res.send("no post")
 });
 
 router.route('/searchbooklist')
@@ -230,13 +258,20 @@ router.route('/bookdetail')
   .get(function(req, res) {
     var url_parts = url.parse(req.url, true);
     bookid = url_parts.query.bookid;
+    name = url_parts.query.name;
+    author = url_parts.query.author;
+    console.log(bookid);
     res.render('bookdetail', {
-        bookid: bookid
+        bookid: bookid,
+        name: name,
+        author: author
     });
   })
   .post(function(req, res) {
       res.send("no post")
   });
+
+
 
 router.route('/getbookdetail')
   .get(function(req, res) {
