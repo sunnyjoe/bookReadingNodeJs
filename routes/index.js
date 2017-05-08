@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const usr = require('../db/dbConnect');
 const url = require('url');
 const heorkuDbUrl = 'postgresql-rigid-68995';
 const pg = require('pg');
@@ -10,26 +9,6 @@ const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/
 
 
 var homeTitle = "方舟图书系统"
-
-router.get('/pg', function(req, res) {
-    console.log("Hello World");
-
-    pg.connect(connectionString, (err, client, done) => {
-        // Handle connection errors
-        if (err) {
-            done();
-            console.log(err);
-            return res.status(500).json({
-                success: false,
-                data: err
-            });
-        }
-        // SQL Query > Insert Data
-        res.render('home');
-
-    });
-
-});
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -63,8 +42,6 @@ router.route('/login')
         res.redirect('/');
     })
     .post(function(req, res) {
-        client = usr.connect();
-
         const username = req.body.username;
         const password = req.body.password;
         found = false;
@@ -134,42 +111,6 @@ router.route('/home')
     });
 
 
-router.route('/insertBibleLog')
-    .get(function(req, res) {
-        var url_parts = url.parse(req.url, true);
-        var theLog = url_parts.query.log;
-        var userName = req.session.islogin;
-        console.log("insertBibleLog" + userName + " " + theLog);
-        usr.insertBibleLogFun(client, userName, theLog, function(err) {
-            if (err) throw err;
-            res.send("Insert successfully!")
-        });
-    })
-    .post(function(req, res) {
-        res.send("no post")
-    });
-
-router.route('/getOthersLog')
-    .get(function(req, res) {
-        client = usr.connect();
-        usr.queryBibleLogFun(client, function(err, rows) {
-            if (err) throw err;
-            res.json(rows);
-        });
-    });
-
-router.route('/getMyLog')
-    .get(function(req, res) {
-        client = usr.connect();
-        var userName = req.session.islogin;
-        console.log("getMylog" + userName);
-        usr.queryMyBibleLogFun(client, userName, function(err, rows) {
-            if (err) throw err;
-        console.log("rows " + rows);
-            res.json(rows);
-        });
-    });
-
 router.route('/reg')
     .get(function(req, res) {
         res.render('reg', {
@@ -190,21 +131,130 @@ router.route('/reg')
         });
     });
 
-router.route('/addBook')
-        .post(function(req, res) {
-            pg.connect(connectionString, (err, client, done) => {
-                name = req.body.name;
-                author = req.body.author;
-                desc = req.body.desc;
+ router.route('/addbook')
+  .get(function(req, res) {
+    res.render('addbook', {
+        title: '添加新书'
+    });
+  })
+  .post(function(req, res) {
+    res.send("no post")
+  });
 
-                queryStr = "insert into bookinfo values('" + name + "','" + author +  "','" + desc + "')";
-                console.log(queryStr);
-                client.query(queryStr);
-                if (err) res.send('该用户名已经存在，请返回重新注册');
-                res.clearCookie('islogin');
-                req.session.destroy();
-                res.redirect('/');
-            });
+router.route('/insertbook')
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        name = url_parts.query.name;
+        author = url_parts.query.author;
+        desc = url_parts.query.desc;
+        count = url_parts.query.count;
+        timestamp = (new Date()).getTime();
+
+        queryStr = "insert into bookinfo values('" + timestamp + "','" + name + "','" + author +  "','" + desc + "','" + count +"')";
+        console.log(queryStr);
+
+        pg.connect(connectionString, (err, client, done) => {
+            client.query(queryStr);
+            if (!err) res.send('ok');
+          });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
+
+router.route('/booklist')
+  .get(function(req, res) {
+       res.render('booklist', {
+           title: '新书'
+       });
+  })
+  .post(function(req, res) {
+       res.send("no post")
+  });
+
+  router.route('/newaddedbook')
+      .get(function(req, res) {
+          queryStr = "select * from bookinfo order by bookid desc limit 20";
+          console.log(queryStr);
+          pg.connect(connectionString, (err, client, done) => {
+            client.query(queryStr, function(err, results, fields){
+              if (!err) res.json(results.rows);
+              });
+          });
+      })
+      .post(function(req, res) {
+           res.send("no post")
+      });
+
+
+
+router.route('/searchbook')
+.get(function(req, res) {
+  res.render('searchbook', {
+      title: '新书'
+  });
+})
+.post(function(req, res) {
+    res.send("no post")
 });
+
+router.route('/borrow')
+.get(function(req, res) {
+  res.render('borrow', {
+      title: '新书'
+  });
+})
+.post(function(req, res) {
+    res.send("no post")
+});
+
+router.route('/searchbooklist')
+  .get(function(req, res) {
+              var url_parts = url.parse(req.url, true);
+              keywords = url_parts.query.keywords;
+
+              queryStr = "select bookid, name, author from bookinfo where name like '%" + keywords + "%' or author like '%" + keywords + "%' or description like '%" + keywords + "%' limit 100;";
+              console.log(queryStr);
+
+              pg.connect(connectionString, (err, client, done) => {
+                client.query(queryStr, function(err, results, fields){
+                  if (!err) res.json(results.rows);
+                  });
+                });
+  })
+  .post(function(req, res) {
+      res.send("no post")
+  });
+
+router.route('/bookdetail')
+  .get(function(req, res) {
+    var url_parts = url.parse(req.url, true);
+    bookid = url_parts.query.bookid;
+    res.render('bookdetail', {
+        bookid: bookid
+    });
+  })
+  .post(function(req, res) {
+      res.send("no post")
+  });
+
+router.route('/getbookdetail')
+  .get(function(req, res) {
+              var url_parts = url.parse(req.url, true);
+              bookid = url_parts.query.bookid;
+
+              queryStr = "select * from bookinfo where bookid='" + bookid + "';";
+              console.log(queryStr);
+
+              pg.connect(connectionString, (err, client, done) => {
+                client.query(queryStr, function(err, results, fields){
+                  if (!err) res.json(results.rows);
+                  });
+                });
+  })
+  .post(function(req, res) {
+      res.send("no post")
+  });
+
 
 module.exports = router;

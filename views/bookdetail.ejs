@@ -1,0 +1,61 @@
+<html>
+
+   <body>
+    <p>详细信息 <p/>
+      <div id="first" class="tabcontent">
+
+         <br>
+          书名:
+         <label id = "name" >
+         <br>
+		作者:
+         <label id = "author" >
+         <br>
+
+         剩下数量：
+         <label id="count">
+         <br>
+
+			简介：
+         <br>
+         <textarea rows="5" cols="50" id = "desc"> </textarea>
+         <br>
+         <br>
+
+      </div>
+
+
+      <script>
+          reloadNewAddedBooks();
+
+          function reloadNewAddedBooks(){
+           var xhttp = new XMLHttpRequest();
+           xhttp.onreadystatechange = function() {
+             if (this.readyState == 4 && this.status == 200) {
+                 parseJsonToTable(this.responseText);
+                 alert(this.responseText);
+             }};
+
+           document.getElementById("name").value = arr[0].name;
+           xhttp.open("GET", "getbookdetail?bookid="+bookid, true);
+           xhttp.send()
+         }
+
+         function parseJsonToTable(response) {
+           var arr = JSON.parse(response);
+           var i;
+           var out = "<table>";
+
+           if (arr.length == 0) {
+             return;
+           }
+              document.getElementById("name").value = arr[0].name;
+              document.getElementById("author").value = arr[0].author;
+              document.getElementById("desc").value = arr[0].description;
+              document.getElementById("count").value = arr[0].count;
+         }
+
+
+      </script>
+   </body>
+</html>

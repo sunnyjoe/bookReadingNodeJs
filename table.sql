@@ -3,13 +3,6 @@ CREATE DATABASE biblereading;
 
 \c biblereading;
 
-CREATE TABLE readinglog
-(
-name varchar(255),
-log text,
-date BIGINT
-);
-
 CREATE TABLE userinfo
 (
 name varchar(255),
@@ -20,7 +13,9 @@ CREATE TABLE bookinfo
 (
 bookId varchar(255),
 name varchar(255),
-description text
+author varchar(255),
+description text,
+count int
 );
 
 CREATE TABLE borrowLog

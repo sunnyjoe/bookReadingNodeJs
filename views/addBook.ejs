@@ -1,20 +1,54 @@
-<!DOCTYPE html>
 <html>
-<head>
-<title>Text Input Control</title>
-</head>
-<body>
-<form method="post" action="/addBook">
-书名:  <input type="text" name="name" />
-<br>
-作者:  <input type="text" name="author" />
-<br>
-简介:  <input type="text" name="desc" />
 
-<input type="submit" value="确定添加">
+   <body>
 
-</form>
+      <div id="first" class="tabcontent">
+         添加图书:
+         <br>
+         <input type="text" id = "name" placeholder="书名" >
+         <br>
+
+         <input type="text" id = "author" placeholder="作者" >
+         <br>
+         <input type="number" id="count" min="1" placeholder="数量">
+         <br>
+
+         <textarea rows="5" cols="50" id = "desc" placeholder="简介"> </textarea>
+         <br>
+         <br>
 
 
-</body>
+         <br><br>
+         <br>
+         <button type="button" onclick="loadDoc()">确定添加</button>
+         <br>
+
+      </div>
+
+
+      <script>
+       function loadDoc() {
+             var bookName = document.getElementById("name").value
+             var author = document.getElementById("author").value
+             var desc = document.getElementById("desc").value
+             var count = document.getElementById("count").value
+
+             var xhttp = new XMLHttpRequest();
+             xhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                 document.getElementById("name").value = "";
+                 document.getElementById("author").value = "";
+                 document.getElementById("desc").value = "";
+                 document.getElementById("count").value = 1;
+
+                 alert("添加成功");
+               }
+             };
+             xhttp.open("GET", "insertbook?name="+bookName+"&author="+author+"&desc="+desc+"&count="+count , true);
+             xhttp.send()
+      }
+
+      </script>
+
+   </body>
 </html>
