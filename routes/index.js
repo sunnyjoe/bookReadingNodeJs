@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const url = require('url');
-const heorkuDbUrl = 'postgresql-elliptical-11681';
+const heorkuDbUrl = 'postgres://yyahnrmdhogkni:ed11615dbf0849b9bfe9454bcd49e277cd56138fa338d1edf2aacddbe754394e@ec2-54-83-205-71.compute-1.amazonaws.com:5432/d5fpav39pfmns8';
 const pg = require('pg');
 const path = require('path');
 const connectionString = heorkuDbUrl || 'postgres://localhost:5432/biblereading';
