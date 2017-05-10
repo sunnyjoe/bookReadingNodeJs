@@ -5,7 +5,7 @@ const url = require('url');
 const heorkuDbUrl = 'postgres://yyahnrmdhogkni:ed11615dbf0849b9bfe9454bcd49e277cd56138fa338d1edf2aacddbe754394e@ec2-54-83-205-71.compute-1.amazonaws.com:5432/d5fpav39pfmns8';
 const pg = require('pg');
 const path = require('path');
-const connectionString = 'postgres://localhost:5432/biblereading';
+const connectionString = heorkuDbUrl || 'postgres://localhost:5432/biblereading';
 
 
 var homeTitle = "方舟图书系统"
