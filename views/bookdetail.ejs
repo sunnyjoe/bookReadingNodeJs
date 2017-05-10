@@ -122,6 +122,10 @@
             }
 
             function borrowBooks(){
+              if (totalBook - readers.length <= 0) {
+                alert("书已经被借光了，请先催人还书 ^_^");
+                return;
+              }
               window.location.href = "borrow?bookid="+bookid+"&name="+bookName+"&author="+bookAuthor;
             }
 

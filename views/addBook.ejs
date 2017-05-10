@@ -36,12 +36,13 @@
              var xhttp = new XMLHttpRequest();
              xhttp.onreadystatechange = function() {
                if (this.readyState == 4 && this.status == 200) {
-                 document.getElementById("name").value = "";
-                 document.getElementById("author").value = "";
-                 document.getElementById("desc").value = "";
-                 document.getElementById("count").value = 1;
+                //  document.getElementById("name").value = "";
+                //  document.getElementById("author").value = "";
+                //  document.getElementById("desc").value = "";
+                //  document.getElementById("count").value = 1;
 
                  alert("添加成功");
+                 window.history.back();
                }
              };
              xhttp.open("GET", "insertbook?name="+bookName+"&author="+author+"&desc="+desc+"&count="+count , true);

@@ -150,7 +150,7 @@ router.route('/insertbook')
         count = url_parts.query.count;
         timestamp = (new Date()).getTime();
 
-        queryStr = "insert into bookinfo values('" + timestamp + "','" + name + "','" + author +  "','" + desc + "','" + count +"')";
+        queryStr = "insert into bookinfo values('" + timestamp + "','" + name + "','" + author +  "','" + desc + "','" + count +"');";
         console.log(queryStr);
 
         pg.connect(connectionString, (err, client, done) => {
@@ -174,7 +174,7 @@ router.route('/booklist')
 
   router.route('/newaddedbook')
       .get(function(req, res) {
-          queryStr = "select * from bookinfo order by bookid desc limit 20";
+          queryStr = "select * from bookinfo order by bookid desc limit 25";
           console.log(queryStr);
           pg.connect(connectionString, (err, client, done) => {
             client.query(queryStr, function(err, results, fields){
@@ -341,7 +341,7 @@ router.route('/getbookdetail')
 
               pg.connect(connectionString, (err, client, done) => {
                 client.query(queryStr, function(err, results, fields){
-                  console.log(results.rows);
+                //  console.log(results.rows);
                   if (!err) res.json(results.rows);
                   });
                 });
