@@ -7,7 +7,7 @@
                 <%=author%>
                     <br> 简介：
                     <br>
-                    <textarea rows="5" cols="50" id="desc"> </textarea>
+                    <textarea readonly rows="5" cols="50" id="desc"> </textarea>
                     <div id="count">---</div>
                     <div id="lastcount">---</div>
                     <br>
@@ -45,7 +45,8 @@
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        parsereaderlist(this.responseText);
+                        readers = JSON.parse(this.responseText);
+                        updateReaderList();
                     }
                 };
 
@@ -53,9 +54,7 @@
                 xhttp.send()
             }
 
-            function parsereaderlist(response) {
-                readers = JSON.parse(response);
-
+            function updateReaderList() {
                 recaculateRemain();
 
                 var out = "<br>";
@@ -77,9 +76,34 @@
 
               var txt;
               if (confirm("确定 " + readerName + " 还书？") == true) {
-                
+                confirmReturnBook(readerName, theTime)
               } else {
                 return;
+              }
+            }
+
+            function confirmReturnBook(readerName, theTime) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        deleteBrrowInfo(readerName, theTime);
+                        alert("还书成功！");
+                        updateReaderList();
+                    }
+                };
+
+                xhttp.open("GET", "confirmreturnbook?bookid=" + bookid+"&reader="+readerName+"&time="+theTime, true);
+                xhttp.send()
+            }
+
+            function deleteBrrowInfo(readerName, theTime) {
+              for(i = 0; i < readers.length; i++) {
+                var r = readers[i].reader;
+                var t = readers[i].thetime;
+                if (readerName == r && theTime == t) {
+                    readers.splice(i, 1);
+                    break;
+                }
               }
             }
 

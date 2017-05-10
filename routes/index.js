@@ -254,6 +254,27 @@ router.route('/returnbook')
 })
 
 
+
+router.route('/confirmreturnbook')
+.get(function(req, res) {
+    var url_parts = url.parse(req.url, true);
+    bookid = url_parts.query.bookid;
+    reader = url_parts.query.reader;
+    thetime = url_parts.query.time;
+
+    queryStr = "delete from borrowinfo where bookid='" + bookid + "' and reader='"+reader+"' and thetime='"+thetime+"';";
+    console.log(queryStr);
+
+    pg.connect(connectionString, (err, client, done) => {
+      client.query(queryStr, function(err, results, fields){
+        if (!err) res.send("ok");
+        });
+      });
+})
+.post(function(req, res) {
+      res.send("no post")
+});
+
 router.route('/getbookborrowlist')
 .get(function(req, res) {
     var url_parts = url.parse(req.url, true);
