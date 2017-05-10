@@ -5,14 +5,9 @@ const url = require('url');
 const heorkuDbUrl = 'postgres://yyahnrmdhogkni:ed11615dbf0849b9bfe9454bcd49e277cd56138fa338d1edf2aacddbe754394e@ec2-54-83-205-71.compute-1.amazonaws.com:5432/d5fpav39pfmns8';
 const pg = require('pg');
 const path = require('path');
-const connectionString =  heorkuDbUrl;//'postgres://localhost:5432/biblereading';
-
-
-const client = new pg.Client(connectionString);
-client.connect();
+const connectionString = heorkuDbUrl;//'postgres://localhost:5432/biblereading';
 
 var homeTitle = "方舟图书系统"
-
 // /* GET home page. */
 // router.get('/', function(req, res) {
 //     console.log("Hello World");
@@ -134,15 +129,62 @@ var homeTitle = "方舟图书系统"
 //         });
 //     });
 
- router.route('/addbook')
-  .get(function(req, res) {
-    res.render('addbook2', {
-        title: '添加新书'
+router.route('/newaddedbook')
+    .get(function(req, res) {
+        queryStr = "select * from bookinfo order by bookid desc limit 25;";
+        console.log(queryStr);
+
+        var client = new pg.Client(connectionString);
+        client.connect()
+
+        if (!client) res.json()
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+            if (!err) {
+                res.json(results.rows);
+            } else {
+                res.json()
+            }
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
     });
-  })
-  .post(function(req, res) {
-    res.send("no post")
-  });
+
+router.route('/searchbooklist')
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        keywords = url_parts.query.keywords;
+
+        queryStr = "select bookid, name, author from bookinfo where name like '%" + keywords + "%' or author like '%" + keywords + "%' or description like '%" + keywords + "%' limit 100;";
+        console.log(queryStr);
+
+        var client = new pg.Client(connectionString);
+        client.connect()
+
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+
+            if (!err) {
+                res.json(results.rows);
+            }
+            console.log(results.rows)
+            res.end();
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
+
+router.route('/addbook')
+    .get(function(req, res) {
+        res.render('addbook2', {
+            title: '添加新书'
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
 router.route('/insertbook')
     .get(function(req, res) {
@@ -153,214 +195,192 @@ router.route('/insertbook')
         count = url_parts.query.count;
         timestamp = (new Date()).getTime();
 
-        queryStr = "insert into bookinfo values('" + timestamp + "','" + name + "','" + author +  "','" + desc + "','" + count +"');";
+        queryStr = "insert into bookinfo values('" + timestamp + "','" + name + "','" + author + "','" + desc + "','" + count + "');";
         console.log(queryStr);
 
-        pg.connect(connectionString, (err, client, done) => {
-            client.query(queryStr);
-            if (!err) res.send('ok');
-          });
+        var client = new pg.Client(connectionString);
+        client.connect();
+
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+
+            if (!err) {
+                res.send('ok');
+            }
+            console.log(results.rows)
+            res.end();
+        });
     })
     .post(function(req, res) {
         res.send("no post")
     });
 
 router.route('/booklist')
-  .get(function(req, res) {
-       res.render('booklist', {
-           title: '新书'
-       });
-  })
-  .post(function(req, res) {
-       res.send("no post")
-  });
+    .get(function(req, res) {
+        res.render('booklist', {
+            title: '新书'
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
-router.route('/newaddedbook')
-.get(function(req, res) {
-        queryStr = "select * from bookinfo order by bookid desc limit 25;";
+router.route('/getbookborrowlist')
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        bookid = url_parts.query.bookid;
+        queryStr = "select reader, thetime from borrowinfo where bookid='" + bookid + "';";
         console.log(queryStr);
-      //  pg.connect(connectionString, (err, client, done) => {
-            if (!client) res.json()
-            client.query(queryStr, function(err, results, fields){
-              done();
-              if (!err) {
-                res.json(results.rows);
-              } else {
-                res.json()
-              }
-            });
-      //  });
-})
-      .post(function(req, res) {
-           res.send("no post")
-      });
 
+        var client = new pg.Client(connectionString);
+        client.connect();
 
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+            // console.log(results.rows);
+            if (!err) res.json(results.rows);
+            res.end();
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
 router.route('/searchbook')
-.get(function(req, res) {
-  res.render('searchbook', {
-      title: '新书'
-  });
-})
-.post(function(req, res) {
-    res.send("no post")
-});
+    .get(function(req, res) {
+        res.render('searchbook', {
+            title: '新书'
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
 router.route('/borrow')
-.get(function(req, res) {
-  var url_parts = url.parse(req.url, true);
-  bookid = url_parts.query.bookid;
-  name = url_parts.query.name;
-  author = url_parts.query.author;
-  console.log(bookid);
-  res.render('borrow', {
-      bookid: bookid,
-      name: name,
-      author: author
-  });
-})
-.post(function(req, res) {
-    res.send("no post")
-});
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        bookid = url_parts.query.bookid;
+        name = url_parts.query.name;
+        author = url_parts.query.author;
+        console.log(bookid);
+        res.render('borrow', {
+            bookid: bookid,
+            name: name,
+            author: author
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
 
 router.route('/confirmborrow')
-.get(function(req, res) {
-    var url_parts = url.parse(req.url, true);
-    bookid = url_parts.query.bookid;
-    reader = url_parts.query.reader;
-    thetime = (new Date()).getTime();
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        bookid = url_parts.query.bookid;
+        reader = url_parts.query.reader;
+        thetime = (new Date()).getTime();
 
-    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"');";
-    console.log(queryStr);
+        queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime + "');";
+        console.log(queryStr);
 
-    pg.connect(connectionString, (err, client, done) => {
-      client.query(queryStr, function(err, results, fields){
-        if (!err) res.send("ok");
+        var client = new pg.Client(connectionString);
+        client.connect();
+
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+            if (!err) res.send("ok");
+            res.end();
         });
-      });
-})
-.post(function(req, res) {
-      res.send("no post")
-});
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
 router.route('/returnbook')
-.get(function(req, res) {
-    var url_parts = url.parse(req.url, true);
-    bookid = url_parts.query.bookid;
-    reader = url_parts.query.reader;
-    thetime = (new Date()).getTime();
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        bookid = url_parts.query.bookid;
+        reader = url_parts.query.reader;
+        thetime = (new Date()).getTime();
 
-    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"');";
-    console.log(queryStr);
+        queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime + "');";
+        console.log(queryStr);
 
-    pg.connect(connectionString, (err, client, done) => {
-      client.query(queryStr, function(err, results, fields){
-        if (!err) res.send("ok");
+        var client = new pg.Client(connectionString);
+        client.connect();
+
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+            if (!err) res.send("ok");
+            res.end();
         });
-      });
-})
+    })
 
 
 
 router.route('/confirmreturnbook')
-.get(function(req, res) {
-    var url_parts = url.parse(req.url, true);
-    bookid = url_parts.query.bookid;
-    reader = url_parts.query.reader;
-    thetime = url_parts.query.time;
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        bookid = url_parts.query.bookid;
+        reader = url_parts.query.reader;
+        thetime = url_parts.query.time;
 
-    queryStr = "delete from borrowinfo where bookid='" + bookid + "' and reader='"+reader+"' and thetime='"+thetime+"';";
-    console.log(queryStr);
+        queryStr = "delete from borrowinfo where bookid='" + bookid + "' and reader='" + reader + "' and thetime='" + thetime + "';";
+        console.log(queryStr);
 
-    pg.connect(connectionString, (err, client, done) => {
-      client.query(queryStr, function(err, results, fields){
-        if (!err) res.send("ok");
+        var client = new pg.Client(connectionString);
+        client.connect();
+
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+            if (!err) res.send("ok");
+            res.end();
         });
-      });
-})
-.post(function(req, res) {
-      res.send("no post")
-});
-
-router.route('/getbookborrowlist')
-.get(function(req, res) {
-    var url_parts = url.parse(req.url, true);
-    bookid = url_parts.query.bookid;
-
-    queryStr = "select reader, thetime from borrowinfo where bookid='" + bookid + "';";
-    console.log(queryStr);
-
-    pg.connect(connectionString, (err, client, done) => {
-      client.query(queryStr, function(err, results, fields){
-        // console.log(results.rows);
-        if (!err) res.json(results.rows);
-        });
-      });
-})
-.post(function(req, res) {
-      res.send("no post")
-});
-
-router.route('/searchbooklist')
-  .get(function(req, res) {
-              var url_parts = url.parse(req.url, true);
-              keywords = url_parts.query.keywords;
-
-              queryStr = "select bookid, name, author from bookinfo where name like '%" + keywords + "%' or author like '%" + keywords + "%' or description like '%" + keywords + "%' limit 100;";
-              console.log(queryStr);
-
-              pg.connect(connectionString, (err, client, done) => {
-                client.query(queryStr, function(err, results, fields){
-                  if (!err) {
-                    res.json(results.rows);
-                  }
-                  console.log(results.rows)
-                  res.end();
-                  });
-                });
-  })
-  .post(function(req, res) {
-      res.send("no post")
-  });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
 router.route('/bookdetail')
-  .get(function(req, res) {
-    var url_parts = url.parse(req.url, true);
-    bookid = url_parts.query.bookid;
-    name = url_parts.query.name;
-    author = url_parts.query.author;
-    console.log(bookid);
-    res.render('bookdetail', {
-        bookid: bookid,
-        name: name,
-        author: author
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        bookid = url_parts.query.bookid;
+        name = url_parts.query.name;
+        author = url_parts.query.author;
+        console.log(bookid);
+        res.render('bookdetail', {
+            bookid: bookid,
+            name: name,
+            author: author
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
     });
-  })
-  .post(function(req, res) {
-      res.send("no post")
-  });
 
 
 
 router.route('/getbookdetail')
-  .get(function(req, res) {
-              var url_parts = url.parse(req.url, true);
-              bookid = url_parts.query.bookid;
+    .get(function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        bookid = url_parts.query.bookid;
 
-              queryStr = "select * from bookinfo where bookid='" + bookid + "';";
-              console.log(queryStr);
+        queryStr = "select * from bookinfo where bookid='" + bookid + "';";
+        console.log(queryStr);
 
-              pg.connect(connectionString, (err, client, done) => {
-                client.query(queryStr, function(err, results, fields){
-                  if (!err) res.json(results.rows);
-                  });
-                });
-  })
-  .post(function(req, res) {
-      res.send("no post")
-  });
+        var client = new pg.Client(connectionString);
+        client.connect();
+
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+            if (!err) res.json(results.rows);
+            res.end();
+          });
+   })
+   .post(function(req, res) {
+       res.send("no post")
+   });
 
 
 module.exports = router;
