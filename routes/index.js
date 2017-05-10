@@ -133,7 +133,7 @@ router.route('/reg')
 
  router.route('/addbook')
   .get(function(req, res) {
-    res.render('addbook', {
+    res.render('addbook2', {
         title: '添加新书'
     });
   })
@@ -190,7 +190,7 @@ router.route('/booklist')
 
 router.route('/searchbook')
 .get(function(req, res) {
-  res.render('addbook', {
+  res.render('searchbook', {
       title: '新书'
   });
 })
