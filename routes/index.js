@@ -5,131 +5,134 @@ const url = require('url');
 const heorkuDbUrl = 'postgres://yyahnrmdhogkni:ed11615dbf0849b9bfe9454bcd49e277cd56138fa338d1edf2aacddbe754394e@ec2-54-83-205-71.compute-1.amazonaws.com:5432/d5fpav39pfmns8';
 const pg = require('pg');
 const path = require('path');
-const connectionString = heorkuDbUrl || 'postgres://localhost:5432/biblereading';
+const connectionString =  heorkuDbUrl;//'postgres://localhost:5432/biblereading';
 
+
+const client = new pg.Client(connectionString);
+client.connect();
 
 var homeTitle = "方舟图书系统"
 
-/* GET home page. */
-router.get('/', function(req, res) {
-    console.log("Hello World");
-
-    if (req.cookies.islogin) {
-        req.session.islogin = req.cookies.islogin;
-    }
-    if (req.session.islogin) {
-        res.locals.islogin = req.session.islogin;
-    }
-
-    if (req.cookies.islogin) {
-        console.log("render home");
-        res.render('home', {
-            title: homeTitle,
-            user: res.locals.islogin
-        });
-    } else {
-        console.log("render login");
-        res.render('login', {
-            title: homeTitle,
-            user: res.locals.islogin
-        });
-    }
-});
-
-
-router.route('/login')
-    .get(function(req, res) {
-        res.redirect('/');
-    })
-    .post(function(req, res) {
-        const username = req.body.username;
-        const password = req.body.password;
-        found = false;
-        pg.connect(connectionString, (err, client, done) => {
-            // Handle connection errors
-            if (err) {
-                console.log('A db connect error occurred: ' + err);
-                res.redirect('/');
-                return;
-            }
-
-            queryStr = "select * from userinfo where name='" + username + "' and password ='" + password + "';";
-            console.log("queryStr " + queryStr);
-
-            var query = client.query(queryStr);
-            var rows = [];
-            query.on('row', function(row, res) {
-                rows.push(row);
-            });
-            query.on('end', function(result) {
-                if (result.rowCount > 0) {
-                    console.log('user found :)');
-                    req.session.islogin = username;
-                    res.locals.islogin = username;
-                    res.cookie('islogin', username, {
-                        maxAge: 60000
-                    });
-                    res.redirect('/home');
-                } else {
-                    console.log('user not found');
-                    res.redirect('/');
-                }
-            });
-
-        });
-
-
-    });
-
-router.get('/logout', function(req, res) {
-    res.clearCookie('islogin');
-    req.session.destroy();
-    res.redirect('/');
-});
-
-router.route('/home')
-    .get(function(req, res) {
-        if (req.session.islogin) {
-            res.locals.islogin = req.session.islogin;
-        }
-        if (req.cookies.islogin) {
-            req.session.islogin = req.cookies.islogin;
-        }
-
-        if (req.cookies.islogin) {
-            console.log("render home");
-            res.render('home', {
-                title: homeTitle,
-                user: res.locals.islogin
-            });
-        } else {
-            res.redirect('/');
-        }
-    })
-    .post(function(req, res) {
-        res.send("no action")
-    });
-
-
-router.route('/reg')
-    .get(function(req, res) {
-        res.render('reg', {
-            title: '注册'
-        });
-    })
-    .post(function(req, res) {
-        pg.connect(connectionString, (err, client, done) => {
-            name = req.body.username;
-            pw = req.body.password2;
-            queryStr = "insert into UserInfo values('" + name + "','" + pw + "')";
-            console.log(queryStr);
-            client.query(queryStr);
-            if (err) res.send('该用户名已经存在，请返回重新注册');
-            res.clearCookie('islogin');
-            req.session.destroy();
-            res.redirect('/');
-        });
-    });
+// /* GET home page. */
+// router.get('/', function(req, res) {
+//     console.log("Hello World");
+//
+//     if (req.cookies.islogin) {
+//         req.session.islogin = req.cookies.islogin;
+//     }
+//     if (req.session.islogin) {
+//         res.locals.islogin = req.session.islogin;
+//     }
+//
+//     if (req.cookies.islogin) {
+//         console.log("render home");
+//         res.render('home', {
+//             title: homeTitle,
+//             user: res.locals.islogin
+//         });
+//     } else {
+//         console.log("render login");
+//         res.render('login', {
+//             title: homeTitle,
+//             user: res.locals.islogin
+//         });
+//     }
+// });
+//
+//
+// router.route('/login')
+//     .get(function(req, res) {
+//         res.redirect('/');
+//     })
+//     .post(function(req, res) {
+//         const username = req.body.username;
+//         const password = req.body.password;
+//         found = false;
+//         pg.connect(connectionString, (err, client, done) => {
+//             // Handle connection errors
+//             if (err) {
+//                 console.log('A db connect error occurred: ' + err);
+//                 res.redirect('/');
+//                 return;
+//             }
+//
+//             queryStr = "select * from userinfo where name='" + username + "' and password ='" + password + "';";
+//             console.log("queryStr " + queryStr);
+//
+//             var query = client.query(queryStr);
+//             var rows = [];
+//             query.on('row', function(row, res) {
+//                 rows.push(row);
+//             });
+//             query.on('end', function(result) {
+//                 if (result.rowCount > 0) {
+//                     console.log('user found :)');
+//                     req.session.islogin = username;
+//                     res.locals.islogin = username;
+//                     res.cookie('islogin', username, {
+//                         maxAge: 60000
+//                     });
+//                     res.redirect('/home');
+//                 } else {
+//                     console.log('user not found');
+//                     res.redirect('/');
+//                 }
+//             });
+//
+//         });
+//
+//
+//     });
+//
+// router.get('/logout', function(req, res) {
+//     res.clearCookie('islogin');
+//     req.session.destroy();
+//     res.redirect('/');
+// });
+//
+// router.route('/home')
+//     .get(function(req, res) {
+//         if (req.session.islogin) {
+//             res.locals.islogin = req.session.islogin;
+//         }
+//         if (req.cookies.islogin) {
+//             req.session.islogin = req.cookies.islogin;
+//         }
+//
+//         if (req.cookies.islogin) {
+//             console.log("render home");
+//             res.render('home', {
+//                 title: homeTitle,
+//                 user: res.locals.islogin
+//             });
+//         } else {
+//             res.redirect('/');
+//         }
+//     })
+//     .post(function(req, res) {
+//         res.send("no action")
+//     });
+//
+//
+// router.route('/reg')
+//     .get(function(req, res) {
+//         res.render('reg', {
+//             title: '注册'
+//         });
+//     })
+//     .post(function(req, res) {
+//         pg.connect(connectionString, (err, client, done) => {
+//             name = req.body.username;
+//             pw = req.body.password2;
+//             queryStr = "insert into UserInfo values('" + name + "','" + pw + "')";
+//             console.log(queryStr);
+//             client.query(queryStr);
+//             if (err) res.send('该用户名已经存在，请返回重新注册');
+//             res.clearCookie('islogin');
+//             req.session.destroy();
+//             res.redirect('/');
+//         });
+//     });
 
  router.route('/addbook')
   .get(function(req, res) {
@@ -172,16 +175,22 @@ router.route('/booklist')
        res.send("no post")
   });
 
-  router.route('/newaddedbook')
-      .get(function(req, res) {
-          queryStr = "select * from bookinfo order by bookid desc limit 25";
-          console.log(queryStr);
-          pg.connect(connectionString, (err, client, done) => {
+router.route('/newaddedbook')
+.get(function(req, res) {
+        queryStr = "select * from bookinfo order by bookid desc limit 25;";
+        console.log(queryStr);
+      //  pg.connect(connectionString, (err, client, done) => {
+            if (!client) res.json()
             client.query(queryStr, function(err, results, fields){
-              if (!err) res.json(results.rows);
-              });
-          });
-      })
+              done();
+              if (!err) {
+                res.json(results.rows);
+              } else {
+                res.json()
+              }
+            });
+      //  });
+})
       .post(function(req, res) {
            res.send("no post")
       });
@@ -223,7 +232,7 @@ router.route('/confirmborrow')
     reader = url_parts.query.reader;
     thetime = (new Date()).getTime();
 
-    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"')";
+    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"');";
     console.log(queryStr);
 
     pg.connect(connectionString, (err, client, done) => {
@@ -243,7 +252,7 @@ router.route('/returnbook')
     reader = url_parts.query.reader;
     thetime = (new Date()).getTime();
 
-    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"')";
+    queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime +"');";
     console.log(queryStr);
 
     pg.connect(connectionString, (err, client, done) => {
@@ -285,7 +294,7 @@ router.route('/getbookborrowlist')
 
     pg.connect(connectionString, (err, client, done) => {
       client.query(queryStr, function(err, results, fields){
-        console.log(results.rows);
+        // console.log(results.rows);
         if (!err) res.json(results.rows);
         });
       });
@@ -304,7 +313,11 @@ router.route('/searchbooklist')
 
               pg.connect(connectionString, (err, client, done) => {
                 client.query(queryStr, function(err, results, fields){
-                  if (!err) res.json(results.rows);
+                  if (!err) {
+                    res.json(results.rows);
+                  }
+                  console.log(results.rows)
+                  res.end();
                   });
                 });
   })
@@ -341,7 +354,6 @@ router.route('/getbookdetail')
 
               pg.connect(connectionString, (err, client, done) => {
                 client.query(queryStr, function(err, results, fields){
-                //  console.log(results.rows);
                   if (!err) res.json(results.rows);
                   });
                 });
