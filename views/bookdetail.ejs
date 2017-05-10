@@ -1,23 +1,45 @@
 <html>
+<style>
+
+  textarea
+  {
+      width: 400px;
+      height: 100px;
+      float:center;
+      border: 0.5px solid #CCC;
+      font-size:15px;
+      text-align: center;
+  }
+
+  button[type="button"]
+  {
+    width: 80px;
+    height: 30px;
+  }
+
+</style>
 
 <body>
-    <p><%=name%>
-        <p/>
-                <br> 作者:
-                <%=author%>
-                    <br> 简介：
+  <center>
+    <h2><%=name%></h2>
+
+           <font size="4" >作者:<%=author%> </font>
+                    <br>
+                    <font size="4" >简介：</font>
                     <br>
                     <textarea readonly rows="5" cols="50" id="desc"> </textarea>
-                    <div id="count">---</div>
-                    <div id="lastcount">---</div>
+
                     <br>
+                <font size="4" >    <div id="count">---</div>
+                    <div id="lastcount">---</div> </font>
+                    <br><br>
 
                     <button type="button" onclick="borrowBooks()"> 借 书 </button>
-<br><br>
+<br>
 
                     借书记录：
 
-                    <div id="log"></div>
+                  <font size="4" >   <div id="log"></div> </font>
         <script>
             //  var url_parts = url.parse(req.url, true);
             //  var bookid = url_parts.query.bookid;

@@ -9,27 +9,52 @@ div {
 float:middle;
 }
 
+ input[type="text"]
+ {
+     width: 230px;
+     height: 35px;
+     border: 1px solid #CCC;
+     font-size:17px;
+ }
+
+ input[type="number"]
+ {
+     width: 100px;
+     height: 30px;
+     border: 1px solid #CCC;
+     font-size:17px;
+ }
+
+
+  textarea
+  {
+      width: 400px;
+      height: 200px;
+      border: 1px solid #CCC;
+      font-size:17px;
+  }
+
+
 </style>
 
    <body>
-
+<center>
        <div id="first">
-         添加图书:
-         <br>
+         <h2>添加图书</h2>
+
          <input type="text" id = "name" placeholder="书名" >
-         <br>
+         <br><br>
 
          <input type="text" id = "author" placeholder="作者" >
-         <br>
+         <br><br>
          <input type="number" id="count" min="1" placeholder="数量">
-         <br>
+         <br><br>
 
          <textarea rows="5" cols="50" id = "desc" placeholder="简介"> </textarea>
          <br>
          <br>
-         <br><br>
          <br>
-         <button type="button" onclick="loadDoc()">确定添加</button>
+         <button type="button" style="height:28px;width:80px" onclick="loadDoc()">确定添加</button>
          <br>
 
       </div>

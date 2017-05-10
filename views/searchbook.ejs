@@ -19,7 +19,7 @@
       th, td{
       text-align: center;
       float: center;
-      width: 100px;
+      width: 200px;
       border-width: 0px;
       border-bottom: 1px black;
       border-style: solid;
@@ -35,14 +35,28 @@
       background-color: brown;
       color: red;
       }
+
+      input[type="text"]
+      {
+          width: 220px;
+          height: 30px;
+          border: 1px solid #CCC;
+          font-size:17px;
+      }
+
+      button[type="button"]
+      {
+        width: 80px;
+        height: 30px;
+      }
+
    </style>
    <body>
-      <h3>方舟图书检索</h3>
+     <center>
+      <h2>方舟图书检索</h2>
       <input type="text" id = "keywords" placeholder="关键词 书名,作者或者简介" >
       <button type="button" onclick="searchBooks()">搜索</button>
       <br><br><br>
-      <p4>结果：</p4>
-      <br>
       <div >
          <table id="table">
             <th>书名</th>

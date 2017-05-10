@@ -129,6 +129,16 @@ var homeTitle = "方舟图书系统"
 //         });
 //     });
 
+router.route('/')
+    .get(function(req, res) {
+        res.render('booklist', {
+            title: '添加新书'
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
+
 router.route('/newaddedbook')
     .get(function(req, res) {
         queryStr = "select * from bookinfo order by bookid desc limit 25;";

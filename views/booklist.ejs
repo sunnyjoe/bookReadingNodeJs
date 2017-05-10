@@ -27,16 +27,20 @@
       .divLogOut {
       float:right;
       }
+
+
    </style>
    <body>
 
-      <h3>方舟图书</h3>
+      <center>
+        <h1>方舟小书馆</h1>
       <span><a href="/addbook">添加新书</a></span>
       <span><a href="/searchbook">图书检索借阅</a></span>
 
 
 <br><br><br>
-      <p4>最新添加的图书</p4>
+      <p4>最新添加的图书</p4> <br>  <button style="height:23px;width:80px" type="button" onclick="reloadNewAddedBooks()">刷新</button>
+<br><br>
 
       <div >
          <table>
@@ -47,7 +51,7 @@
          <div id="id01"></div>
       </div>
 
-
+</center>
       <script>
           reloadNewAddedBooks();
 
