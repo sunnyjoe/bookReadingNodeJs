@@ -133,7 +133,7 @@ router.route('/reg')
 
  router.route('/addbook')
   .get(function(req, res) {
-    res.render('booklist', {
+    res.render('addbook', {
         title: '添加新书'
     });
   })
