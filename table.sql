@@ -1,7 +1,3 @@
-DROP DATABASE IF EXISTS biblereading;
-CREATE DATABASE biblereading;
-
-\c biblereading;
 
 CREATE TABLE borrowhistory
 (

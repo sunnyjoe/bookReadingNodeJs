@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const url = require('url');
-const heorkuDbUrl = 'postgresql-rigid-68995';
+const heorkuDbUrl = 'postgresql-elliptical-11681';
 const pg = require('pg');
 const path = require('path');
-const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/biblereading';
+const connectionString = heorkuDbUrl || 'postgres://localhost:5432/biblereading';
 
 
 var homeTitle = "方舟图书系统"
