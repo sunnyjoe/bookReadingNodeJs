@@ -141,7 +141,7 @@ router.route('/')
 
 router.route('/newaddedbook')
     .get(function(req, res) {
-        queryStr = "select * from bookinfo order by bookid desc limit 25;";
+        queryStr = "select bookid, name, author from bookinfo order by bookid desc limit 25;";
         console.log(queryStr);
 
         var client = new pg.Client(connectionString);
@@ -255,6 +255,28 @@ router.route('/getbookborrowlist')
     .post(function(req, res) {
         res.send("no post")
     });
+
+    router.route('/popularbooks')
+        .get(function(req, res) {
+            var url_parts = url.parse(req.url, true);
+            bookid = url_parts.query.bookid;
+
+            var queryStr = "SELECT p.bookid, t.name, t.author FROM (SELECT * FROM borrowhistory ORDER BY thetime limit 30) p INNER JOIN bookinfo t ON p.bookid = t.bookid;";
+            console.log(queryStr);
+
+            var client = new pg.Client(connectionString);
+            client.connect();
+
+            client.query(queryStr, function(err, results, fields) {
+                client.end();
+                if (!err) res.json(results.rows);
+                res.end();
+              });
+       })
+       .post(function(req, res) {
+           res.send("no post")
+       });
+
 
 router.route('/searchbook')
     .get(function(req, res) {

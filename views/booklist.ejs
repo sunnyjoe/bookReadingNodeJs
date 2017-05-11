@@ -65,34 +65,54 @@
 <br><br> -->
 
 <ul class="tab">
-   <li><a href="#" class="tablinks" onclick="openCity(event, 'first')" id="firstTab">最新添加的图书</a></li>
-   <li><a href="#" class="tablinks" onclick="openCity(event, 'second')">最受欢迎的书</a></li>
+   <li><a href="#" class="tablinks" onclick="openTab(event, 'first')" id="firstTab">最新添加的图书</a></li>
+   <li><a href="#" class="tablinks" onclick="openTab(event, 'second')">最受欢迎的书</a></li>
 </ul>
 
-      <!-- <div id="first" class="tabcontent"> -->
+      <div id="first" class="tabcontent">
          <button type="button" width= 50px onclick="reloadNewAddedBooks()">刷新</button>
          <table>
             <th>书名</th>
             <th>作者</th>
-            <th>简介</th>
          </table>
          <div id="id01"></div>
-    <!-- </div> -->
+    </div>
 
-      <!-- <div id="second" class="tabcontent">
-         圣经章节:
-         <br>
-         <input type="text" name="biblelog" id = "biblelog" placeholder="圣经章节" >
-         <br><br>
-         <button type="button" onclick="loadDoc()">签到</button>
-         <br>
-         <label id="here"></label>
-         <br>
-      </div> -->
+      <div id="second" class="tabcontent">
+        <button type="button" width= 50px onclick="reloadPopularBooks()">刷新</button>
+        <table>
+           <th>书名</th>
+           <th>作者</th>
+        </table>
+        <div id="id02"></div>
+      </div>
 
 </center>
       <script>
-          reloadNewAddedBooks();
+
+      reloadNewAddedBooks();
+      document.getElementById('firstTab').click();
+
+                     function openTab(evt, tabName) {
+                         var i, tabcontent, tablinks;
+                         tabcontent = document.getElementsByClassName("tabcontent");
+                         for (i = 0; i < tabcontent.length; i++) {
+                             tabcontent[i].style.display = "none";
+                         }
+                         tablinks = document.getElementsByClassName("tablinks");
+                         for (i = 0; i < tablinks.length; i++) {
+                             tablinks[i].className = tablinks[i].className.replace(" active", "");
+                         }
+                         document.getElementById(tabName).style.display = "block";
+                         evt.currentTarget.className += " active";
+
+                         if (tabName == "frist") {
+                           reloadNewAddedBooks();
+                         } else {
+                           reloadPopularBooks();
+                         }
+                     }
+
 
           function reloadNewAddedBooks(){
            var xhttp = new XMLHttpRequest();
@@ -102,6 +122,16 @@
              }};
            xhttp.open("GET", "newaddedbook", true);
            xhttp.send()
+         }
+
+         function reloadPopularBooks(){
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                parseJsonToTable(this.responseText, "id02");
+            }};
+          xhttp.open("GET", "popularbooks", true);
+          xhttp.send()
          }
 
          var list=new Array; ///this one way of declaring array in javascript
@@ -115,11 +145,8 @@
 
            for(i = 0; i < arr.length; i++) {
               out += "<tr onclick=selectrow("+i+")>";
-              if (tableId == "id01") {
-                out += "<td>" + arr[i].name + "</td>";
-              }
+              out += "<td>" + arr[i].name + "</td>";
               out += "<td>" + arr[i].author + "</td>"
-                + "<td>" + arr[i].description + "</td>"
                 +"</tr>";
            }
               out += "</table>";
