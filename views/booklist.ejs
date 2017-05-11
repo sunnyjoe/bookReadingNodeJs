@@ -2,6 +2,27 @@
    <style>
       body {font-family: "Lato", sans-serif;}
       /* Change background color of links on hover */
+      ul.tab {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+      }
+      /* Float the list items side by side */
+      ul.tab li {float: left;}
+      /* Style the links inside the list items */
+      ul.tab li a {
+      display: inline-block;
+      color: black;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 17px;
+      }
+      /* Change background color of links on hover */
       ul.tab li a:hover {
       background-color: #ddd;
       }
@@ -16,6 +37,7 @@
       -webkit-animation: fadeEffect 1s;
       animation: fadeEffect 1s;
       }
+
       th, td{
       text-align: center;
       float: center;
@@ -38,18 +60,35 @@
       <span><a href="/searchbook">图书检索借阅</a></span>
 
 
-<br><br><br>
+<!-- <br><br><br>
       <p4>最新添加的图书</p4> <br>  <button style="height:23px;width:80px" type="button" onclick="reloadNewAddedBooks()">刷新</button>
-<br><br>
+<br><br> -->
 
-      <div >
+<ul class="tab">
+   <li><a href="#" class="tablinks" onclick="openCity(event, 'first')" id="firstTab">最新添加的图书</a></li>
+   <li><a href="#" class="tablinks" onclick="openCity(event, 'second')">最受欢迎的书</a></li>
+</ul>
+
+      <!-- <div id="first" class="tabcontent"> -->
+         <button type="button" width= 50px onclick="reloadNewAddedBooks()">刷新</button>
          <table>
             <th>书名</th>
             <th>作者</th>
             <th>简介</th>
          </table>
          <div id="id01"></div>
-      </div>
+    <!-- </div> -->
+
+      <!-- <div id="second" class="tabcontent">
+         圣经章节:
+         <br>
+         <input type="text" name="biblelog" id = "biblelog" placeholder="圣经章节" >
+         <br><br>
+         <button type="button" onclick="loadDoc()">签到</button>
+         <br>
+         <label id="here"></label>
+         <br>
+      </div> -->
 
 </center>
       <script>
@@ -70,7 +109,7 @@
          function parseJsonToTable(response, tableId) {
            var arr = JSON.parse(response);
            list = arr;
-           
+
            var i;
            var out = "<table>";
 

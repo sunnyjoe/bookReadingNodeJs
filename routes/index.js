@@ -205,7 +205,7 @@ router.route('/insertbook')
         count = url_parts.query.count;
         timestamp = (new Date()).getTime();
 
-        queryStr = "insert into bookinfo values('" + timestamp + "','" + name + "','" + author + "','" + desc + "','" + count + "');";
+        queryStr = "insert into bookinfo values('" + timestamp + "','" + name + "','" + author + "','" + desc + "','" + count + "'); insert into borrowhistory values('" + timestamp+ "','0');";
         console.log(queryStr);
 
         var client = new pg.Client(connectionString);
@@ -291,7 +291,7 @@ router.route('/confirmborrow')
         reader = url_parts.query.reader;
         thetime = (new Date()).getTime();
 
-        queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime + "');";
+        queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime + "'); update borrowhistory set thetime=thetime + 1 where bookid='" + bookid + "';";
         console.log(queryStr);
 
         var client = new pg.Client(connectionString);
