@@ -17,13 +17,23 @@
     height: 30px;
   }
 
+  .editor { float:right }
+
+  .title { float:middle }
+
+  header{
+     float:center;
+     text-align:center;
+  }
+
 </style>
 
 <body>
-  <center>
-    <h2><%=name%></h2>
-
-           <font size="4" >作者:<%=author%> </font>
+  <span class="editor">  <button type="button" onclick="openEditBook()"> 修改信息 </button>
+</span><br>
+    <header> <h2><label id="name"> <%=name%><label><h2> </header>
+    <center>
+           <font size="4" >作者:<label id="author"><%=author%></label> </font>
                     <br>
                     <font size="4" >简介：</font>
                     <br>
@@ -44,9 +54,10 @@
             //  var url_parts = url.parse(req.url, true);
             //  var bookid = url_parts.query.bookid;
           var bookid = getUrlVars()["bookid"];
-          var bookName = getUrlVars()["name"];
-          var bookAuthor= getUrlVars()["author"];
+          var bookName
+          var bookAuthor
           var totalBook = 0;
+          var description = "";
           var readers = new Array;
 
             fetchBookDetail();
@@ -160,6 +171,10 @@
                 return vars;
             }
 
+            function openEditBook() {
+              window.location.href = "editbook?bookid="+bookid+"&name="+bookName+"&author="+bookAuthor+"&desc="+description+"&count="+totalBook;
+             }
+
             function parseJsonToTable(response) {
                 var arr = JSON.parse(response);
 
@@ -167,8 +182,13 @@
                     return;
                 }
               //  alert(arr[0].count);
+                bookName = arr[0].name;
+                bookAuthor= arr[0].author;
                 totalBook = parseInt(arr[0].count);
-                document.getElementById("desc").value = arr[0].description;
+                description = arr[0].description;
+                document.getElementById("name").innerHTML = bookName;
+                document.getElementById("author").innerHTML = bookAuthor;
+                document.getElementById("desc").value = description;
                 document.getElementById("count").innerHTML = "总数量：" + totalBook;
 
                 fetchBookBorrowInfo();

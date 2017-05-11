@@ -65,13 +65,17 @@
            xhttp.send()
          }
 
+         var list=new Array; ///this one way of declaring array in javascript
+
          function parseJsonToTable(response, tableId) {
            var arr = JSON.parse(response);
+           list = arr;
+           
            var i;
            var out = "<table>";
 
            for(i = 0; i < arr.length; i++) {
-              out += "<tr>";
+              out += "<tr onclick=selectrow("+i+")>";
               if (tableId == "id01") {
                 out += "<td>" + arr[i].name + "</td>";
               }
@@ -83,10 +87,14 @@
               document.getElementById(tableId).innerHTML = out;
          }
 
-         function intToTimeStr(theTime) {
-           var  myDate = new Date(1000*theTime);
-           return myDate.toLocaleTimeString();
+         function selectrow(index) {
+           var bookid = list[index].bookid;
+           var name = list[index].name;
+           var author = list[index].author;
+
+           window.location.href = "bookdetail?bookid="+bookid+"&name="+name+"&author="+author;
         }
+
 
       </script>
    </body>

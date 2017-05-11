@@ -1,0 +1,102 @@
+<html>
+<style>
+header{
+   float:center;
+   text-align:center;
+}
+
+div {
+float:middle;
+}
+
+ input[type="text"]
+ {
+     width: 230px;
+     height: 35px;
+     border: 1px solid #CCC;
+     font-size:17px;
+ }
+
+ input[type="number"]
+ {
+     width: 100px;
+     height: 30px;
+     border: 1px solid #CCC;
+     font-size:17px;
+ }
+
+
+  textarea
+  {
+      width: 400px;
+      height: 200px;
+      border: 1px solid #CCC;
+      font-size:17px;
+  }
+
+
+</style>
+
+   <body>
+<center>
+
+       <div id="first">
+         <h2>修改信息</h2>
+
+         <input type="text" id = "name" placeholder="书名" value=<%=name%>>
+         <br><br>
+
+         <input type="text" id = "author" placeholder="作者" value=<%=author%> >
+         <br><br>
+         <input type="number" id="count" min="1" placeholder="数量" value=<%=count%>>
+         <br><br>
+
+         <textarea rows="5" cols="50" id = "desc" placeholder="简介"><%=desc%> </textarea>
+         <br>
+         <br>
+         <br>
+         <button type="button" style="height:28px;width:80px" onclick="update()">确定修改</button>
+         <br>
+
+      </div>
+
+
+      <script>
+
+      var bookid = getUrlVars()["bookid"];
+      // alert(getUrlVars()["name"]);
+
+    //  document.getElementById("name").value = getUrlVars()["name"];
+    //  document.getElementById("author").value = getUrlVars()["author"];
+      // document.getElementById("desc").value = getUrlVars()["desc"];
+      // document.getElementById("count").value = parseInt(getUrlVars()["count"]);
+
+       function update() {
+             var name = document.getElementById("name").value
+             var author = document.getElementById("author").value
+             var desc = document.getElementById("desc").value
+             var count = document.getElementById("count").value
+
+             var xhttp = new XMLHttpRequest();
+             xhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                 alert("修改成功");
+                 window.history.back();
+               }
+             };
+             xhttp.open("GET", "updatebook?bookid="+bookid+"&name="+name+"&author="+author+"&desc="+desc+"&count="+count , true);
+             xhttp.send()
+      }
+
+      function getUrlVars() {
+          var vars = {};
+          var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+              vars[key] = value;
+          });
+          return vars;
+      }
+
+      </script>
+
+   </body>
+</html>

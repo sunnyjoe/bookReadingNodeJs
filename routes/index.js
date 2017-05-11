@@ -393,4 +393,56 @@ router.route('/getbookdetail')
    });
 
 
+   router.route('/editbook')
+       .get(function(req, res) {
+           var url_parts = url.parse(req.url, true);
+
+           var bookid = url_parts.query.bookid;
+           var name= url_parts.query.name;
+           var author= url_parts.query.author;
+           var desc= url_parts.query.desc;
+           var count= url_parts.query.count;
+
+        //   console.log(name);
+
+           res.render('editbook', {
+             bookid: bookid,
+             name: name,
+             author: author,
+             desc: desc,
+             count: count
+           });
+       })
+       .post(function(req, res) {
+           res.send("no post")
+       });
+
+   router.route('/updatebook')
+       .get(function(req, res) {
+         var url_parts = url.parse(req.url, true);
+           bookid = url_parts.query.bookid;
+           name = url_parts.query.name;
+           author = url_parts.query.author;
+           desc = url_parts.query.desc;
+           count = url_parts.query.count;
+
+           queryStr = "update bookinfo set name='"+name+"', author='"+author+"', description='"+desc+"', count='"+count+"'where bookid='"+bookid+"';";
+           console.log(queryStr);
+
+           var client = new pg.Client(connectionString);
+           client.connect();
+
+           client.query(queryStr, function(err, results, fields) {
+               client.end();
+
+               if (!err) {
+                   res.send('ok');
+               }
+               res.end();
+           });
+       })
+       .post(function(req, res) {
+           res.send("no post")
+       });
+
 module.exports = router;
