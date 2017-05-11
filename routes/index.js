@@ -7,6 +7,9 @@ const pg = require('pg');
 const path = require('path');
 const connectionString = heorkuDbUrl;//'postgres://localhost:5432/biblereading';
 
+const fs = require('fs');
+var dir = path.join(__dirname, 'public');
+
 var homeTitle = "方舟图书系统"
 // /* GET home page. */
 // router.get('/', function(req, res) {
@@ -138,6 +141,22 @@ router.route('/')
     .post(function(req, res) {
         res.send("no post")
     });
+
+router.route('/images')
+.get(function(req, res) {
+
+  var url_parts = url.parse(req.url, true);
+  var name = url_parts.query.name;
+  var file = path.join(dir, name);
+
+    var s = fs.createReadStream(file);
+    s.on('open', function () {
+        res.setHeader('Content-Type', 'image/jpeg');
+        s.pipe(res);
+    });
+
+});
+
 
 router.route('/newaddedbook')
     .get(function(req, res) {

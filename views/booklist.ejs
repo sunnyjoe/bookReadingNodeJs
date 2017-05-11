@@ -50,19 +50,24 @@
       float:right;
       }
 
+      .headerBgimg {
+          background-image: url('images?name=arkBanner.jpg');
+          background-clip: content-box;
+      }
 
    </style>
    <body>
 
       <center>
+
+      <div id="header" class="headerBgimg">
+        <br>
         <h1>方舟小书馆</h1>
       <span><a href="/addbook">添加新书</a></span>
       <span><a href="/searchbook">图书检索借阅</a></span>
-
-
-<!-- <br><br><br>
-      <p4>最新添加的图书</p4> <br>  <button style="height:23px;width:80px" type="button" onclick="reloadNewAddedBooks()">刷新</button>
-<br><br> -->
+      <br>
+      <br><br>
+    </div>
 
 <ul class="tab">
    <li><a href="#" class="tablinks" onclick="openTab(event, 'first')" id="firstTab">最新添加的图书</a></li>
@@ -103,10 +108,10 @@
                          for (i = 0; i < tablinks.length; i++) {
                              tablinks[i].className = tablinks[i].className.replace(" active", "");
                          }
-                         document.getElementById(tabName).style.display = "block";
                          evt.currentTarget.className += " active";
+                         document.getElementById(tabName).style.display = "block";
 
-                         if (tabName == "frist") {
+                         if (tabName == "first") {
                            reloadNewAddedBooks();
                          } else {
                            reloadPopularBooks();
