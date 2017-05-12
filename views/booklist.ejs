@@ -1,169 +1,216 @@
 <html>
-   <style>
-      body {font-family: "Lato", sans-serif;}
-      /* Change background color of links on hover */
-      ul.tab {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      border: 1px solid #ccc;
-      background-color: #f1f1f1;
-      }
-      /* Float the list items side by side */
-      ul.tab li {float: left;}
-      /* Style the links inside the list items */
-      ul.tab li a {
-      display: inline-block;
-      color: black;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      transition: 0.3s;
-      font-size: 17px;
-      }
-      /* Change background color of links on hover */
-      ul.tab li a:hover {
-      background-color: #ddd;
-      }
-      /* Create an active/current tablink class */
-      ul.tab li a:focus, .active {
-      background-color: #ccc;
-      }
-      /* Style the tab content */
-      .tabcontent {
-      display: none;
-      padding: 6px 12px;
-      -webkit-animation: fadeEffect 1s;
-      animation: fadeEffect 1s;
-      }
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+    /* Change background color of links on hover */
 
-      th, td{
-      text-align: center;
-      float: center;
-      width: 320px;
-      border-width: 0px;
-      border-bottom: 1px black;
-      border-style: solid;
-      }
-      .divLogOut {
-      float:right;
-      }
+    ul.tab {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+    /* Float the list items side by side */
 
-      .headerBgimg {
-          background-image: url('images?name=arkBanner.jpg');
-          background-clip: content-box;
-      }
+    ul.tab li {
+        float: left;
+    }
+    /* Style the links inside the list items */
 
-   </style>
-   <body>
+    ul.tab li a {
+        display: inline-block;
+        color: black;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+    /* Change background color of links on hover */
 
-      <center>
+    ul.tab li a:hover {
+        background-color: #ddd;
+    }
+    /* Create an active/current tablink class */
 
-      <div id="header" class="headerBgimg">
-        <br>
-        <h1>方舟小书馆</h1>
-      <span><a href="/addbook">添加新书</a></span>
-      <span><a href="/searchbook">图书检索借阅</a></span>
-      <br>
-      <br><br>
-    </div>
+    ul.tab li a:focus,
+    .active {
+        background-color: #ccc;
+    }
+    /* Style the tab content */
 
-<ul class="tab">
-   <li><a href="#" class="tablinks" onclick="openTab(event, 'first')" id="firstTab">最新添加的图书</a></li>
-   <li><a href="#" class="tablinks" onclick="openTab(event, 'second')">最受欢迎的书</a></li>
-</ul>
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        -webkit-animation: fadeEffect 1s;
+        animation: fadeEffect 1s;
+    }
+    th,
+    td {
+        text-align: center;
+        float: center;
+        width: 320px;
+        border-width: 0px;
+        border-bottom: 1px black;
+        border-style: solid;
+    }
+    .divLogOut {
+        float: right;
+    }
+    .headerBgimg {
+        background-image: url('images?name=arkBanner.jpg');
+        background-clip: content-box;
+    }
+</style>
 
-      <div id="first" class="tabcontent">
-         <button type="button" width= 50px onclick="reloadNewAddedBooks()">刷新</button>
-         <table>
-            <th>书名</th>
-         </table>
-         <div id="id01"></div>
-    </div>
+<body>
 
-      <div id="second" class="tabcontent">
-        <button type="button" width= 50px onclick="reloadPopularBooks()">刷新</button>
-        <table>
-           <th>书名</th>
-        </table>
-        <div id="id02"></div>
-      </div>
+    <center>
 
-</center>
-      <script>
+        <div id="header" class="headerBgimg">
+            <br>
+            <h1>方舟小书馆</h1>
+            <span><a href="/addbook">添加新书</a></span>
+            <span><a href="/searchbook">图书检索借阅</a></span>
+            <br>
+            <br>
+            <br>
+        </div>
 
-      reloadNewAddedBooks();
-      document.getElementById('firstTab').click();
+        <ul class="tab">
+            <li><a href="#" class="tablinks" onclick="openTab(event, 'first')" id="firstTab">最新添加的图书</a>
+            </li>
+            <li><a href="#" class="tablinks" onclick="openTab(event, 'second')">最受欢迎的书</a>
+            </li>
+        </ul>
 
-                     function openTab(evt, tabName) {
-                         var i, tabcontent, tablinks;
-                         tabcontent = document.getElementsByClassName("tabcontent");
-                         for (i = 0; i < tabcontent.length; i++) {
-                             tabcontent[i].style.display = "none";
-                         }
-                         tablinks = document.getElementsByClassName("tablinks");
-                         for (i = 0; i < tablinks.length; i++) {
-                             tablinks[i].className = tablinks[i].className.replace(" active", "");
-                         }
-                         evt.currentTarget.className += " active";
-                         document.getElementById(tabName).style.display = "block";
+        <div id="first" class="tabcontent">
+            <button type="button" width=50px onclick="reloadNewAddedBooks()">刷新首页</button>
+            <button type="button" width=60px onclick="nextNewAddedBooks()">下一页</button>
+            <button type="button" width=60px onclick="previousNewAddedBooks()">上一页</button>
 
-                         if (tabName == "first") {
-                           reloadNewAddedBooks();
-                         } else {
-                           reloadPopularBooks();
-                         }
-                     }
+            <table>
+                <th>书名</th>
+            </table>
+            <div id="id01"></div>
+        </div>
 
+        <div id="second" class="tabcontent">
+            <button type="button" width=5 0px onclick="reloadPopularBooks()">刷新</button>
+            <table>
+                <th>书名</th>
+            </table>
+            <div id="id02"></div>
+        </div>
 
-          function reloadNewAddedBooks(){
-           var xhttp = new XMLHttpRequest();
-           xhttp.onreadystatechange = function() {
-             if (this.readyState == 4 && this.status == 200) {
-                 parseJsonToTable(this.responseText, "id01");
-             }};
-           xhttp.open("GET", "newaddedbook", true);
-           xhttp.send()
-         }
+    </center>
+    <script>
+        var newBookList = new Array; ///this one way of declaring array in javascript
+        var popularBookList = new Array; ///this one way of declaring array in javascript
 
-         function reloadPopularBooks(){
-          var xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                parseJsonToTable(this.responseText, "id02");
-            }};
-          xhttp.open("GET", "popularbooks", true);
-          xhttp.send()
-         }
+        var currentPageFirstTimeStamp = 0;
+        var currentPageLastTimeStamp = 99999999999999;
 
-         var list=new Array; ///this one way of declaring array in javascript
+        reloadNewAddedBooks();
+        reloadPopularBooks();
 
-         function parseJsonToTable(response, tableId) {
-           var arr = JSON.parse(response);
-           list = arr;
+        document.getElementById('firstTab').click();
 
-           var i;
-           var out = "<table>";
-
-           for(i = 0; i < arr.length; i++) {
-              out += "<tr onclick=selectrow("+i+")>";
-              out += "<td>" + arr[i].name + "</td>";
-                +"</tr>";
-           }
-              out += "</table>";
-              document.getElementById(tableId).innerHTML = out;
-         }
-
-         function selectrow(index) {
-           var bookid = list[index].bookid;
-           var name = list[index].name;
-           var author = list[index].author;
-
-           window.location.href = "bookdetail?bookid="+bookid+"&name="+name+"&author="+author;
+        function nextNewAddedBooks() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                 if (this.readyState == 4 && this.status == 200) {
+                   var resultList = JSON.parse(this.responseText);
+                   if (resultList.length == 0) {
+                     alert("没有下一页啦 #_#");
+                     return;
+                   }
+                  currentPageFirstTimeStamp = parseInt(resultList[0].bookid);
+                  currentPageLastTimeStamp = parseInt(resultList[resultList.length - 1].bookid);
+                  newBookList = resultList
+                  reloadTable(newBookList, "id01");
+                }
+            };
+            xhttp.open("GET", "newaddedbooknextpage?isnext=1&timestamp=" + currentPageLastTimeStamp, true);
+            xhttp.send()
         }
 
+        function previousNewAddedBooks() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                  var resultList = JSON.parse(this.responseText);
+                  if (resultList.length == 0) {
+                    alert("已经是第一页了 #_#");
+                    return;
+                  }
 
-      </script>
-   </body>
+                  var byDate = resultList.slice(0);
+                  byDate.sort(function(a,b) {
+                    return parseInt(b.bookid) - parseInt(a.bookid);
+                  });
+                  resultList = byDate;
+
+                  currentPageFirstTimeStamp = parseInt(resultList[0].bookid);
+                  currentPageLastTimeStamp = parseInt(resultList[resultList.length - 1].bookid);
+                  newBookList = resultList
+                  reloadTable(newBookList, "id01");
+                }
+            };
+            xhttp.open("GET", "newaddedbooknextpage?isnext=0&timestamp=" + currentPageFirstTimeStamp, true);
+            xhttp.send()
+        }
+
+        function reloadNewAddedBooks() {
+            previousNewAddedBooks();
+        }
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            evt.currentTarget.className += " active";
+            document.getElementById(tabName).style.display = "block";
+        }
+
+        function reloadPopularBooks() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    popularBookList = JSON.parse(this.responseText);
+                    reloadTable(popularBookList, "id02");
+                }
+            };
+            xhttp.open("GET", "popularbooks", true);
+            xhttp.send()
+        }
+
+        function reloadTable(arr, tableId) {
+            var i;
+            var out = "<table>";
+            for (i = 0; i < arr.length; i++) {
+                var bookid = arr[i].bookid;
+                out += "<tr onclick=selectrow(" + bookid + ")>";
+                out += "<td>" + arr[i].name + "</td>"; + "</tr>";
+            }
+            out += "</table>";
+
+            document.getElementById(tableId).innerHTML = out;
+        }
+
+        function selectrow(bookid) {
+            window.location.href = "bookdetail?bookid=" + bookid;
+        }
+    </script>
+</body>
+
 </html>

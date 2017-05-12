@@ -157,10 +157,16 @@ router.route('/images')
 
 });
 
-
-router.route('/newaddedbook')
+router.route('/newaddedbooknextpage')
     .get(function(req, res) {
-        queryStr = "select bookid, name, author from bookinfo order by bookid desc limit 25;";
+         var url_parts = url.parse(req.url, true);
+         isnext = url_parts.query.isnext;
+         timestamp = url_parts.query.timestamp;
+
+         var queryStr = "select bookid, name from bookinfo where bookid > '"+timestamp+"'order by bookid asc limit 35;";
+         if (isnext==1){
+           queryStr = "select bookid, name from bookinfo where bookid < '"+timestamp+"'order by bookid desc limit 35;";
+         }
         console.log(queryStr);
 
         var client = new pg.Client(connectionString);
@@ -179,6 +185,28 @@ router.route('/newaddedbook')
     .post(function(req, res) {
         res.send("no post")
     });
+
+// router.route('/newaddedbook')
+//     .get(function(req, res) {
+//         queryStr = "select bookid, name, author from bookinfo order by bookid desc limit 5;";
+//         console.log(queryStr);
+//
+//         var client = new pg.Client(connectionString);
+//         client.connect()
+//
+//         if (!client) res.json()
+//         client.query(queryStr, function(err, results, fields) {
+//             client.end();
+//             if (!err) {
+//                 res.json(results.rows);
+//             } else {
+//                 res.json()
+//             }
+//         });
+//     })
+//     .post(function(req, res) {
+//         res.send("no post")
+//     });
 
 router.route('/searchbooklist')
     .get(function(req, res) {
@@ -280,7 +308,7 @@ router.route('/getbookborrowlist')
             var url_parts = url.parse(req.url, true);
             bookid = url_parts.query.bookid;
 
-            var queryStr = "SELECT p.bookid, t.name, t.author FROM (SELECT * FROM borrowhistory ORDER BY thetime limit 30) p INNER JOIN bookinfo t ON p.bookid = t.bookid;";
+            var queryStr = "SELECT p.bookid, t.name, t.author FROM (SELECT * FROM borrowhistory ORDER BY thetime limit 50) p INNER JOIN bookinfo t ON p.bookid = t.bookid order by thetime desc;";
             console.log(queryStr);
 
             var client = new pg.Client(connectionString);
