@@ -1,4 +1,6 @@
 <html>
+<link rel="stylesheet" type="text/css" href="css?name=table.css">
+
 <style>
 
   textarea
@@ -11,15 +13,7 @@
       text-align: center;
   }
 
-  button[type="button"]
-  {
-    width: 80px;
-    height: 30px;
-  }
-
   .editor { float:right }
-
-  .title { float:middle }
 
   header{
      float:center;
@@ -29,15 +23,22 @@
 </style>
 
 <body>
-  <span class="editor">  <button type="button" onclick="openEditBook()"> 修改信息 </button>
-</span><br>
+
+  <div class="headerBgimg">
+     <button type="button" class="topleftcorner" onclick="openhome()"> 主页 </button>
+     <button type="button" class="toprightcorner" onclick="openEditBook()"> 修改信息 </button>
+
     <header> <h2><label id="name"> <%=name%><label><h2> </header>
+</div>
+
+
+
     <center>
+      <br>
            <font size="4" >作者:<label id="author"><%=author%></label> </font>
-                    <br>
-                    <font size="4" >简介：</font>
-                    <br>
-                    <textarea readonly rows="5" cols="50" id="desc"> </textarea>
+                    <br><br>
+
+                    <textarea readonly rows="5" cols="50" id="desc" placeholder="简介"> </textarea>
 
                     <br>
                 <font size="4" >    <div id="count">---</div>
@@ -45,7 +46,7 @@
                     <br><br>
 
                     <button type="button" onclick="borrowBooks()"> 借 书 </button>
-<br>
+<br><br>
 
                     借书记录：
 
@@ -193,6 +194,10 @@
 
                 fetchBookBorrowInfo();
                 recaculateRemain();
+            }
+
+            function openhome() {
+              window.location.href = "/";
             }
 
         </script>

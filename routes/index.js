@@ -154,7 +154,20 @@ router.route('/images')
         res.setHeader('Content-Type', 'image/jpeg');
         s.pipe(res);
     });
+});
 
+router.route('/css')
+.get(function(req, res) {
+
+  var url_parts = url.parse(req.url, true);
+  var name = url_parts.query.name;
+  var file = path.join(dir, "/css/"+name);
+
+    var s = fs.createReadStream(file);
+    s.on('open', function () {
+        res.setHeader('Content-Type', 'text/css');
+        s.pipe(res);
+    });
 });
 
 router.route('/newaddedbooknextpage')

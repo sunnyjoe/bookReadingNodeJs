@@ -1,66 +1,24 @@
 <html>
-   <style>
-      body {font-family: "Lato", sans-serif;}
-      /* Change background color of links on hover */
-      ul.tab li a:hover {
-      background-color: #ddd;
-      }
-      /* Create an active/current tablink class */
-      ul.tab li a:focus, .active {
-      background-color: #ccc;
-      }
-      /* Style the tab content */
-      .tabcontent {
-      display: none;
-      padding: 6px 12px;
-      -webkit-animation: fadeEffect 1s;
-      animation: fadeEffect 1s;
-      }
-      th, td{
-      text-align: center;
-      float: center;
-      width: 200px;
-      border-width: 0px;
-      border-bottom: 1px black;
-      border-style: solid;
-      }
-      .divLogOut {
-      float:right;
-      }
-      tr {
-      cursor: default;
-      }
-      .highlight { background: yellow; }
-      .selected {
-      background-color: brown;
-      color: red;
-      }
 
-      input[type="text"]
-      {
-          width: 220px;
-          height: 30px;
-          border: 1px solid #CCC;
-          font-size:17px;
-      }
+<link rel="stylesheet" type="text/css" href="css?name=table.css">
 
-      button[type="button"]
-      {
-        width: 80px;
-        height: 30px;
-      }
-
-   </style>
    <body>
      <center>
+       <div id="header" class="headerBgimg">
+         <button type="button" class="topleftcorner" onclick="openhome()"> 主页 </button>
       <h2>方舟图书检索</h2>
+    </div>
+
+    <div class="functionBar">
+      <br>
       <input type="text" id = "keywords" placeholder="关键词 书名,作者或者简介" >
       <button type="button" onclick="searchBooks()">搜索</button>
-      <br><br><br>
+      <br><br>
+   </div>
+
       <div >
          <table id="table">
             <th>书名</th>
-            <th>作者</th>
          </table>
          <div id="id01"></div>
       </div>
@@ -89,7 +47,7 @@
            for(i = 0; i < localarr.length; i++) {
               out += "<tr onclick=selectrow("+i+")>";
               out += "<td>" + localarr[i].name + "</td>";
-              out += "<td>" + localarr[i].author + "</td>" + "</tr>";
+              out += "</tr>";
            }
               out += "</table>";
               document.getElementById(tableId).innerHTML = out;
@@ -104,6 +62,10 @@
             window.location.href = "bookdetail?bookid="+bookid+"&name="+name+"&author="+author;
            }
 
+           function openhome() {
+             window.location.href = "/";
+           }
+           
       </script>
    </body>
 </html>

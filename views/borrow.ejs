@@ -1,40 +1,19 @@
 <html>
-<style>
 
-  textarea
-  {
-      width: 400px;
-      height: 100px;
-      float:center;
-      border: 0.5px solid #CCC;
-      font-size:15px;
-      text-align: center;
-  }
-
-  button[type="button"]
-  {
-    width: 80px;
-    height: 30px;
-  }
-
-  input[type="text"]
-  {
-      width: 230px;
-      height: 35px;
-      border: 1px solid #CCC;
-      font-size:17px;
-  }
-
-</style>
+<link rel="stylesheet" type="text/css" href="css?name=table.css">
 
    <body>
      <center>
+       <div class="headerBgimg">
+         <button type="button" class="topleftcorner" onclick="openhome()"> 主页 </button>
+
     <h2>借书 </h2>
-      <div id="first" class="tabcontent">
+  </div>
+      <div id="first" class="content">
 
         <font size="4" > <br>
-          书名: <%=name%>
-         <br>
+           <%=name%>
+         <br><br>
 		       作者: <%=author%>
          <br> </front>
 
@@ -73,6 +52,10 @@
                  vars[key] = value;
              });
              return vars;
+         }
+
+         function openhome() {
+           window.location.href = "/";
          }
 
       </script>

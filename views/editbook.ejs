@@ -1,9 +1,8 @@
 <html>
+
+<link rel="stylesheet" type="text/css" href="css?name=table.css">
+
 <style>
-header{
-   float:center;
-   text-align:center;
-}
 
 div {
 float:middle;
@@ -40,9 +39,11 @@ float:middle;
    <body>
 <center>
 
-       <div id="first">
+       <div id="first" class="headerBgimg">
+         <button type="button" class="topleftcorner" onclick="openhome()"> 主页 </button>
          <h2>修改信息</h2>
-
+     </div>
+     <br>
          <input type="text" id = "name" placeholder="书名" value=<%=name%>>
          <br><br>
 
@@ -55,10 +56,10 @@ float:middle;
          <br>
          <br>
          <br>
-         <button type="button" style="height:28px;width:80px" onclick="update()">确定修改</button>
+         <button type="button" onclick="update()">确定修改</button>
          <br>
 
-      </div>
+      <!-- </div> -->
 
 
       <script>
@@ -94,6 +95,10 @@ float:middle;
               vars[key] = value;
           });
           return vars;
+      }
+
+      function openhome() {
+        window.location.href = "/";
       }
 
       </script>
