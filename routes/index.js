@@ -332,7 +332,9 @@ router.route('/confirmborrow')
         reader = url_parts.query.reader;
         thetime = (new Date()).getTime();
 
-        queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime + "'); update borrowhistory set thetime=thetime + 1 where bookid='" + bookid + "';";
+        var queryStr = "insert into borrowinfo values('" + bookid + "','" + reader + "','" + thetime + "');";
+        updateStr= "insert into borrowhistory select '" + bookid + "', '0' where not exists (select * from borrowhistory where bookid='" + bookid + "'); update borrowhistory set thetime=thetime + 1 where bookid='" + bookid + "';"
+        queryStr += updateStr;
         console.log(queryStr);
 
         var client = new pg.Client(connectionString);

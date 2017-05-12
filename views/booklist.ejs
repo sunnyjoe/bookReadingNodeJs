@@ -41,7 +41,7 @@
       th, td{
       text-align: center;
       float: center;
-      width: 200px;
+      width: 320px;
       border-width: 0px;
       border-bottom: 1px black;
       border-style: solid;
@@ -78,7 +78,6 @@
          <button type="button" width= 50px onclick="reloadNewAddedBooks()">刷新</button>
          <table>
             <th>书名</th>
-            <th>作者</th>
          </table>
          <div id="id01"></div>
     </div>
@@ -87,7 +86,6 @@
         <button type="button" width= 50px onclick="reloadPopularBooks()">刷新</button>
         <table>
            <th>书名</th>
-           <th>作者</th>
         </table>
         <div id="id02"></div>
       </div>
@@ -151,7 +149,6 @@
            for(i = 0; i < arr.length; i++) {
               out += "<tr onclick=selectrow("+i+")>";
               out += "<td>" + arr[i].name + "</td>";
-              out += "<td>" + arr[i].author + "</td>"
                 +"</tr>";
            }
               out += "</table>";
