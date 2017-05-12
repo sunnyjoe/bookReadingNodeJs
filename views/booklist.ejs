@@ -111,7 +111,7 @@
         var newBookList = new Array; ///this one way of declaring array in javascript
         var popularBookList = new Array; ///this one way of declaring array in javascript
 
-        var currentPageFirstTimeStamp = 0;
+        var currentPageFirstTimeStamp = 99999999999999;
         var currentPageLastTimeStamp = 99999999999999;
 
         reloadNewAddedBooks();
@@ -165,7 +165,7 @@
         }
 
         function reloadNewAddedBooks() {
-            previousNewAddedBooks();
+            nextNewAddedBooks();
         }
 
         function openTab(evt, tabName) {

@@ -186,27 +186,27 @@ router.route('/newaddedbooknextpage')
         res.send("no post")
     });
 
-// router.route('/newaddedbook')
-//     .get(function(req, res) {
-//         queryStr = "select bookid, name, author from bookinfo order by bookid desc limit 5;";
-//         console.log(queryStr);
-//
-//         var client = new pg.Client(connectionString);
-//         client.connect()
-//
-//         if (!client) res.json()
-//         client.query(queryStr, function(err, results, fields) {
-//             client.end();
-//             if (!err) {
-//                 res.json(results.rows);
-//             } else {
-//                 res.json()
-//             }
-//         });
-//     })
-//     .post(function(req, res) {
-//         res.send("no post")
-//     });
+router.route('/newaddedbook')
+    .get(function(req, res) {
+        queryStr = "select bookid, name, author from bookinfo order by bookid desc limit 35;";
+        console.log(queryStr);
+
+        var client = new pg.Client(connectionString);
+        client.connect()
+
+        if (!client) res.json()
+        client.query(queryStr, function(err, results, fields) {
+            client.end();
+            if (!err) {
+                res.json(results.rows);
+            } else {
+                res.json()
+            }
+        });
+    })
+    .post(function(req, res) {
+        res.send("no post")
+    });
 
 router.route('/searchbooklist')
     .get(function(req, res) {
